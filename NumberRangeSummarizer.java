@@ -1,62 +1,32 @@
-public class NumberRangeSummarizer implements Collector<Integer, List<String>, List<String>>{
+package numberrangesummarizer;
 
-    private int last = 0;
-    private LinkedList<Integer> intermediate = new LinkedList<>();
+import java.util.Collection;
 
-    @Override
-    public Supplier<List<String>> supplier(){
-        return ArrayList::new;
-    }
+/**
+ * @author Werner
+ *
+ * Implement this Interface to produce a comma delimited list of numbers,
+ * grouping the numbers into a range when they are sequential.
+ *
+ *
+ * Sample Input: "1,3,6,7,8,12,13,14,15,21,22,23,24,31
+ * Result: "1, 3, 6-8, 12-15, 21-24, 31"
+ *
+ * The code will be evaluated on
+ *   - functionality
+ *   - style
+ *   - robustness
+ *   - best practices
+ *   - unit tests
+ */
+public interface NumberRangeSummarizer {
 
-    @Override
-    public BiConsumer<List<String>, Integer> accumulator(){
-        return ( finalList, current ) -> {
-            if( current - last == 1 ){ // check if adjacent to last value
-                intermediate.add(current);
-            } else{
-                if( intermediate.size() > 2 ){
-                    finalList.add(intermediate.getFirst() + "-" + intermediate.getLast()); // add new range
-                } else{
-                    addLeftOverValues(finalList);
-                }
-                intermediate.clear();
-                intermediate.add(current);
-            }
-            last = current;
-        };
-    }
+    //collect the input
+    Collection<Integer> collect(String input);
 
-    @Override
-    public BinaryOperator<List<String>> combiner(){
-        return (list, list2) -> {
-            list.addAll(list2);
-            return list;
-        };
-    }
+    //get the summarized string
+    String summarizeCollection(Collection<Integer> input);
 
-    @Override
-    public Function<List<String>, List<String>> finisher(){
-        return ( finalList ) -> {
-            if( !intermediate.isEmpty() ){
-                addLeftOverValues(finalList);
-            }
-            return finalList;
-        };
-    }
-
-    @Override
-    public Set<Characteristics> characteristics(){
-        return EnumSet.noneOf(Characteristics.class);
-    }
-
-    private void addLeftOverValues( List<String> list ){
-        list.addAll(
-            intermediate.stream()
-                .map(String::valueOf)
-                .collect(Collectors.toList())
-       );
-    }
 }
 
-List<Integer> list = Arrays.asList(1,3,6,7,8,12,13,14,15,21,22,23,24,31);
-System.out.println(list.stream().collect(new NumberRangeSummarizer()));
+
