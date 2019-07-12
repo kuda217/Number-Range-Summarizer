@@ -59,5 +59,5 @@ public class NumberRangeSummarizer_init implements NumberRangeSummarizer<Integer
 }
 
 
-ist<Integer> list = Arrays.asList1,3,6,7,8,12,13,14,15,21,22,23,24,31);
+ist<Integer> list = Arrays.asList(1,3,6,7,8,12,13,14,15,21,22,23,24,31);
 System.out.println(list.stream().collect(new RangeCollector()));
